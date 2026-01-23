@@ -11,6 +11,12 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
+# Local environment (direnv)
+.envrc
+.direnv/
+.env
+.env.*
+
 # IDE
 .idea/
 .vscode/

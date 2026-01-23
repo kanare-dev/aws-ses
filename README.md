@@ -18,6 +18,10 @@ cp terraform.tfvars.example terraform.tfvars
 # terraform.tfvarsを編集してCloudflareの認証情報を設定
 vim terraform.tfvars
 
+# (任意) direnv を使う場合
+cp .envrc.example .envrc
+direnv allow
+
 # 初期化
 terraform init
 
@@ -36,6 +40,14 @@ terraform output smtp_endpoint
 terraform output smtp_username
 terraform output smtp_password
 ```
+
+## セキュリティ（公開リポジトリにする前に）
+
+- **絶対にコミットしない**: `terraform.tfvars` / `terraform.tfstate*`（`tfstate` には IAM の secret access key や `smtp_password` 等が保存されます）
+- **漏洩が疑われる場合の対応**:
+  - Cloudflare API Token を **revoke/再発行**
+  - AWS IAM の Access Key を **無効化して再発行**（または `ses-sender` ユーザー自体を作り直す）
+  - もし `tfstate/tfvars` を誤ってコミットした場合は **git履歴からも完全削除**（ファイル削除だけでは不十分）
 
 ## 構成
 
