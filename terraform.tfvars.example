@@ -1,0 +1,14 @@
+# AWS region for SES
+aws_region = "ap-northeast-1"
+
+# Domain for SES
+domain = "kanare.dev"
+
+# Cloudflare API token
+# Create at: https://dash.cloudflare.com/profile/api-tokens
+# Required permissions: Zone:DNS:Edit for kanare.dev
+cloudflare_api_token = "your-cloudflare-api-token"
+
+# Cloudflare zone ID
+# Found at: https://dash.cloudflare.com -> kanare.dev -> Overview (right sidebar)
+cloudflare_zone_id = "your-cloudflare-zone-id"
