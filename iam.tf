@@ -15,15 +15,19 @@ resource "aws_iam_policy" "ses_sender" {
           "ses:SendEmail",
           "ses:SendRawEmail"
         ]
-        Resource = [
-          "arn:aws:ses:${var.aws_region}:${data.aws_caller_identity.current.account_id}:identity/${var.domain}",
-          "arn:aws:ses:${var.aws_region}:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.domain}"
-        ]
-        Condition = {
-          StringEquals = {
-            "ses:FromAddress" = "noreply@${var.domain}"
-          }
-        }
+        # NOTE:
+        # SES SMTP 経由の送信では、IAMポリシーの Resource を identity ARN に絞ると
+        # クライアント/経路によっては権限評価が期待通りにならず、
+        # 535 Authentication Credentials Invalid になるケースがあるため "*" を使用する。
+        #
+        # 送信元の制限をかけたい場合は、まず Supabase 側の From が確実に一致することを
+        # 確認した上で、下の Condition を有効化して段階的に締めるのが安全。
+        Resource = "*"
+        # Condition = {
+        #   StringEquals = {
+        #     "ses:FromAddress" = "noreply@${var.domain}"
+        #   }
+        # }
       }
     ]
   })
