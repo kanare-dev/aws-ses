@@ -1,6 +1,6 @@
 # AWS SES with Cloudflare DNS
 
-Terraformを使用してAWS SESとCloudflare DNSを設定し、`noreply@kanare.dev`からメールを送信できるようにする。
+Terraformを使用してAWS SESとCloudflare DNSを設定し、`noreply@notify.kanare.dev`からメールを送信できるようにする。
 
 ## 前提条件
 
@@ -64,12 +64,12 @@ terraform output smtp_password
 
 Terraformにより以下のDNSレコードがCloudflareに作成される：
 
-- `_amazonses.kanare.dev` (TXT) - ドメイン検証
-- `*._domainkey.kanare.dev` (CNAME x3) - DKIM
-- `mail.kanare.dev` (MX) - Mail From
-- `mail.kanare.dev` (TXT) - SPF
-- `kanare.dev` (TXT) - SPF
-- `_dmarc.kanare.dev` (TXT) - DMARC
+- `_amazonses.notify.kanare.dev` (TXT) - ドメイン検証
+- `*._domainkey.notify.kanare.dev` (CNAME x3) - DKIM
+- `mail.notify.kanare.dev` (MX) - Mail From
+- `mail.notify.kanare.dev` (TXT) - SPF
+- `notify.kanare.dev` (TXT) - SPF
+- `_dmarc.notify.kanare.dev` (TXT) - DMARC
 
 ## サンドボックス制限の解除
 

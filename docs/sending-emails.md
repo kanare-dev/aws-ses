@@ -14,13 +14,13 @@ Terraformで構築したSES環境からメールを送信する手順。
 
 1. [AWS SESコンソール](https://console.aws.amazon.com/ses/) にアクセス
 2. 左メニュー「Verified identities」を選択
-3. `kanare.dev` のステータスが「Verified」になっていることを確認
+3. `notify.kanare.dev` のステータスが「Verified」になっていることを確認
 
 ### CLIで確認
 
 ```bash
 aws ses get-identity-verification-attributes \
-  --identities kanare.dev \
+  --identities notify.kanare.dev \
   --region ap-northeast-1
 ```
 
@@ -28,7 +28,7 @@ aws ses get-identity-verification-attributes \
 ```json
 {
   "VerificationAttributes": {
-    "kanare.dev": {
+    "notify.kanare.dev": {
       "VerificationStatus": "Success"
     }
   }
@@ -116,7 +116,7 @@ const transporter = nodemailer.createTransport({
 });
 
 await transporter.sendMail({
-  from: 'noreply@kanare.dev',
+  from: 'noreply@notify.kanare.dev',
   to: 'recipient@example.com',
   subject: 'テストメール',
   text: 'これはテストメールです。',
@@ -134,7 +134,7 @@ import os
 
 msg = MIMEMultipart('alternative')
 msg['Subject'] = 'テストメール'
-msg['From'] = 'noreply@kanare.dev'
+msg['From'] = 'noreply@notify.kanare.dev'
 msg['To'] = 'recipient@example.com'
 
 text = 'これはテストメールです。'
@@ -161,7 +161,7 @@ import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 const client = new SESClient({ region: 'ap-northeast-1' });
 
 const command = new SendEmailCommand({
-  Source: 'noreply@kanare.dev',
+  Source: 'noreply@notify.kanare.dev',
   Destination: {
     ToAddresses: ['recipient@example.com'],
   },
@@ -185,7 +185,7 @@ import boto3
 client = boto3.client('ses', region_name='ap-northeast-1')
 
 response = client.send_email(
-    Source='noreply@kanare.dev',
+    Source='noreply@notify.kanare.dev',
     Destination={
         'ToAddresses': ['recipient@example.com'],
     },
@@ -203,7 +203,7 @@ response = client.send_email(
 
 ```bash
 aws ses send-email \
-  --from noreply@kanare.dev \
+  --from noreply@notify.kanare.dev \
   --to recipient@example.com \
   --subject "テストメール" \
   --text "これはテストメールです。" \
@@ -220,7 +220,7 @@ SMTP_HOST=email-smtp.ap-northeast-1.amazonaws.com
 SMTP_PORT=587
 SMTP_USERNAME=your-smtp-username
 SMTP_PASSWORD=your-smtp-password
-MAIL_FROM=noreply@kanare.dev
+MAIL_FROM=noreply@notify.kanare.dev
 ```
 
 ### 環境変数のエクスポート
@@ -237,13 +237,13 @@ export SMTP_PASSWORD=$(terraform output -raw smtp_password)
 1. **ドメイン検証の確認**
    ```bash
    aws ses get-identity-verification-attributes \
-     --identities kanare.dev --region ap-northeast-1
+     --identities notify.kanare.dev --region ap-northeast-1
    ```
 
 2. **DNSレコードの確認**
    ```bash
-   dig TXT _amazonses.kanare.dev
-   dig TXT _dmarc.kanare.dev
+   dig TXT _amazonses.notify.kanare.dev
+   dig TXT _dmarc.notify.kanare.dev
    ```
 
 3. **サンドボックス制限の確認**

@@ -14,7 +14,7 @@ resource "aws_ses_domain_mail_from" "main" {
   mail_from_domain = "mail.${var.domain}"
 }
 
-# SES Email Identity for noreply@kanare.dev
+# SES Email Identity for noreply@notify.kanare.dev
 resource "aws_ses_email_identity" "noreply" {
   email = "noreply@${var.domain}"
 }

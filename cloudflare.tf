@@ -36,7 +36,7 @@ resource "cloudflare_record" "ses_mail_from_spf" {
   ttl     = 300
 }
 
-# Root domain SPF record (if not already exists)
+# Domain SPF record (if not already exists)
 resource "cloudflare_record" "root_spf" {
   zone_id = var.cloudflare_zone_id
   name    = var.domain

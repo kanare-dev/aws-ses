@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "domain" {
   description = "Domain name for SES"
   type        = string
-  default     = "kanare.dev"
+  default     = "notify.kanare.dev"
 }
 
 variable "cloudflare_api_token" {
@@ -17,6 +17,6 @@ variable "cloudflare_api_token" {
 }
 
 variable "cloudflare_zone_id" {
-  description = "Cloudflare zone ID for the domain"
+  description = "Cloudflare zone ID for the parent zone (e.g. kanare.dev)"
   type        = string
 }

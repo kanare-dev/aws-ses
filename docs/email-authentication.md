@@ -28,8 +28,8 @@ DNSのTXTレコードに許可するIPアドレスやホスト名を記載する
 ### 仕組み
 
 ```
-1. 送信者が noreply@kanare.dev からメール送信
-2. 受信サーバーが kanare.dev のSPFレコードを参照
+1. 送信者が noreply@notify.kanare.dev からメール送信
+2. 受信サーバーが notify.kanare.dev のSPFレコードを参照
 3. 送信元IPがSPFレコードに含まれているか確認
 4. 含まれていれば PASS、なければ FAIL
 ```
@@ -77,7 +77,7 @@ DKIMはメールに電子署名を付与し、送信元の正当性と内容の�
 ### メールヘッダー例
 
 ```
-DKIM-Signature: v=1; a=rsa-sha256; d=kanare.dev; s=xxxxxxxx;
+DKIM-Signature: v=1; a=rsa-sha256; d=notify.kanare.dev; s=xxxxxxxx;
     h=from:to:subject:date;
     bh=base64encodedBodyHash;
     b=base64encodedSignature
@@ -87,7 +87,7 @@ DKIM-Signature: v=1; a=rsa-sha256; d=kanare.dev; s=xxxxxxxx;
 | --- | --- |
 | `v=1` | DKIMバージョン |
 | `a=rsa-sha256` | 署名アルゴリズム |
-| `d=kanare.dev` | 署名ドメイン |
+| `d=notify.kanare.dev` | 署名ドメイン |
 | `s=xxxxxxxx` | セレクタ（公開鍵を識別） |
 | `h=from:to:...` | 署名対象のヘッダー |
 | `bh=...` | 本文のハッシュ |
@@ -96,7 +96,7 @@ DKIM-Signature: v=1; a=rsa-sha256; d=kanare.dev; s=xxxxxxxx;
 ### DNSレコード例
 
 ```
-selector._domainkey.kanare.dev. IN CNAME selector.dkim.amazonses.com.
+selector._domainkey.notify.kanare.dev. IN CNAME selector.dkim.amazonses.com.
 ```
 
 AWS SESの場合、CNAMEレコードでAmazonの公開鍵を参照する。
@@ -124,15 +124,15 @@ DMARCはSPFとDKIMの検証結果を基に、認証失敗時の処理方法を�
 DMARCは「ヘッダーFrom」と「SPF/DKIMのドメイン」が一致するか確認する。
 
 ```
-ヘッダーFrom: noreply@kanare.dev
-SPF検証ドメイン: kanare.dev     → 一致 ✓
-DKIM署名ドメイン: kanare.dev   → 一致 ✓
+ヘッダーFrom: noreply@notify.kanare.dev
+SPF検証ドメイン: notify.kanare.dev     → 一致 ✓
+DKIM署名ドメイン: notify.kanare.dev   → 一致 ✓
 ```
 
 ### レコード例
 
 ```
-v=DMARC1; p=quarantine; rua=mailto:dmarc@kanare.dev
+v=DMARC1; p=quarantine; rua=mailto:dmarc@notify.kanare.dev
 ```
 
 | 要素 | 説明 |
@@ -164,14 +164,14 @@ v=DMARC1; p=quarantine; rua=mailto:dmarc@kanare.dev
 ### SPF
 
 ```hcl
-# mail.kanare.dev (Mail From用)
+# mail.notify.kanare.dev (Mail From用)
 resource "cloudflare_record" "ses_mail_from_spf" {
   name    = "mail.${var.domain}"
   type    = "TXT"
   content = "v=spf1 include:amazonses.com ~all"
 }
 
-# kanare.dev (ルートドメイン)
+# notify.kanare.dev (送信ドメイン)
 resource "cloudflare_record" "root_spf" {
   name    = var.domain
   type    = "TXT"
@@ -208,13 +208,13 @@ resource "cloudflare_record" "dmarc" {
 
 ```bash
 # SPF
-dig TXT kanare.dev
+dig TXT notify.kanare.dev
 
 # DKIM
-dig CNAME selector._domainkey.kanare.dev
+dig CNAME selector._domainkey.notify.kanare.dev
 
 # DMARC
-dig TXT _dmarc.kanare.dev
+dig TXT _dmarc.notify.kanare.dev
 ```
 
 ### オンラインツール
