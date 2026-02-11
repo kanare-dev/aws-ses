@@ -66,8 +66,6 @@ Terraformにより以下のDNSレコードがCloudflareに作成される：
 
 - `_amazonses.notify.kanare.dev` (TXT) - ドメイン検証
 - `*._domainkey.notify.kanare.dev` (CNAME x3) - DKIM
-- `mail.notify.kanare.dev` (MX) - Mail From
-- `mail.notify.kanare.dev` (TXT) - SPF
 - `notify.kanare.dev` (TXT) - SPF
 - `_dmarc.notify.kanare.dev` (TXT) - DMARC
 

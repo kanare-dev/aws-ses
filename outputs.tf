@@ -13,6 +13,16 @@ output "ses_dkim_tokens" {
   value       = aws_ses_domain_dkim.main.dkim_tokens
 }
 
+output "ses_dkim_cname_records" {
+  description = "DKIM CNAME records to add in DNS (name -> value)"
+  value = [
+    for token in aws_ses_domain_dkim.main.dkim_tokens : {
+      name  = "${token}._domainkey.${var.domain}"
+      value = "${token}.dkim.amazonses.com"
+    }
+  ]
+}
+
 output "ses_sender_access_key_id" {
   description = "Access key ID for SES sender IAM user"
   value       = aws_iam_access_key.ses_sender.id

@@ -164,13 +164,6 @@ v=DMARC1; p=quarantine; rua=mailto:dmarc@notify.kanare.dev
 ### SPF
 
 ```hcl
-# mail.notify.kanare.dev (Mail From用)
-resource "cloudflare_record" "ses_mail_from_spf" {
-  name    = "mail.${var.domain}"
-  type    = "TXT"
-  content = "v=spf1 include:amazonses.com ~all"
-}
-
 # notify.kanare.dev (送信ドメイン)
 resource "cloudflare_record" "root_spf" {
   name    = var.domain
